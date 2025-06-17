@@ -1,0 +1,76 @@
+# TW-MRT Model Configuration
+# Trend-Weighted Multi-Resolution Transformer for Glucose Prediction
+
+# Experiment Settings
+experiment:
+  name: "TW-MRT-Glucose-Prediction"
+  description: "Trend-Weighted Multi-Resolution Transformer for Multi-Parametric Glucose Prediction"
+  seed: 0
+  output_dir: "results"
+  log_dir: "logs"
+  
+# Data Configuration
+data:
+  dataset: "OhioT1DM"
+  patients: ["patient552", "patient575"]
+  test_split: 0.2
+  val_split: 0.2
+  batch_size: 32
+  num_workers: 4
+  
+# Model Hyperparameters
+model:
+  name: "DynamicGlucosePredictionModel"
+  input_features: [3]  # CGM, CGM+Basal, CGM+Basal+CHO, CGM+Basal+CHO+Bolus
+  d_model: 64
+  nhead: 4
+  num_layers: 3
+  dim_feedforward: 128
+  dropout: 0.1
+  max_len: 5000
+  num_resolutions: 3
+
+# Training Configuration
+training:
+  num_epochs: 100
+  max_epochs: 200
+  learning_rate: 0.001
+  weight_decay: 0.01
+  optimizer: "AdamW"
+  scheduler:
+    name: "ReduceLROnPlateau"
+    mode: "min"
+    factor: 0.5
+    patience: 3
+  loss_function: "MSELoss"
+  early_stopping:
+    patience: 10
+    min_delta: 0.001
+
+# Experimental Parameters
+experiment_params:
+  input_windows: [3]  # 15, 30, 45, 60, 90, 120 minutes (in 5-minute intervals)
+  prediction_horizons: [12]  # 15, 30, 45, 60, 90, 120 minutes (in 5-minute intervals)
+  feature_numbers: [3]  # Number of input features to use
+
+# Hardware Configuration
+hardware:
+  device: "cuda"
+  cuda_visible_devices: "0"
+  cuda_deterministic: true
+  cuda_benchmark: false
+
+# Logging Configuration
+logging:
+  level: "INFO"
+  save_model: true
+  save_predictions: true
+  log_interval: 10
+  tensorboard: true
+  save_plots: true
+
+# Reproducibility Settings
+reproducibility:
+  deterministic: true
+  use_deterministic_algorithms: true
+  warn_only: false 
