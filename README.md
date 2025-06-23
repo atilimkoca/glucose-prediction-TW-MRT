@@ -16,6 +16,8 @@ TW-MRT is a novel deep learning model designed to accurately predict future bloo
 - Transformer encoder with time-aware inputs
 - Support for prediction horizons ranging from 15 to 120 minutes
 - Evaluated on the OhioT1DM dataset
+- Features Importance
+  ![](evolution_animation_patient0_feat3.gif)
 
 **Reproducibility Features:**
 - 🐳 **Docker Support**: Complete containerization for environment consistency
